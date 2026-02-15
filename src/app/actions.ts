@@ -100,8 +100,16 @@ export async function submitRsvp(
 
   console.log('Participation soumise:', rsvpSubmission);
 
+  const isNotAttending =
+    rsvpSubmission.attendingNoon === 'no' &&
+    rsvpSubmission.attendingEvening === 'no';
+
   // Redirect on success
-  redirect('/confirmation');
+  if (isNotAttending) {
+    redirect('/confirmation?attending=no');
+  } else {
+    redirect('/confirmation');
+  }
 }
 
 export async function getSuggestedQuestions(
