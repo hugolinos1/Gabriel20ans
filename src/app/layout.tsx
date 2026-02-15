@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Gabriel's Gala RSVP",
-  description: "RSVP for Gabriel's 20th Birthday Celebration",
+  title: "RSVP pour le Gala de Gabriel",
+  description: "RSVP pour la célébration du 20e anniversaire de Gabriel",
 };
 
 export default function RootLayout({
@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="fr" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />

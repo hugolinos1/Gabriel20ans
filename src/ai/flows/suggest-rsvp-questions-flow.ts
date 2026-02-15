@@ -14,13 +14,13 @@ const SuggestRsvpQuestionsInputSchema = z.object({
   eventType: z
     .string()
     .describe(
-      'The type of event for which to suggest RSVP questions (e.g., "20th birthday celebration", "wedding", "conference").'
+      'Le type d\'événement pour lequel suggérer des questions RSVP (par exemple, "fête du 20e anniversaire", "mariage", "conférence").'
     ),
   existingQuestions: z
     .array(z.string())
     .optional()
     .describe(
-      'A list of questions already present in the RSVP form, to avoid suggesting duplicates.'
+      'Une liste de questions déjà présentes dans le formulaire RSVP, pour éviter de suggérer des doublons.'
     ),
 });
 export type SuggestRsvpQuestionsInput = z.infer<
@@ -30,7 +30,7 @@ export type SuggestRsvpQuestionsInput = z.infer<
 const SuggestRsvpQuestionsOutputSchema = z.object({
   suggestedQuestions: z
     .array(z.string())
-    .describe('A list of suggested RSVP questions.'),
+    .describe('Une liste de questions RSVP suggérées.'),
 });
 export type SuggestRsvpQuestionsOutput = z.infer<
   typeof SuggestRsvpQuestionsOutputSchema
@@ -46,19 +46,19 @@ const suggestRsvpQuestionsPrompt = ai.definePrompt({
   name: 'suggestRsvpQuestionsPrompt',
   input: { schema: SuggestRsvpQuestionsInputSchema },
   output: { schema: SuggestRsvpQuestionsOutputSchema },
-  prompt: `You are an AI assistant specialized in event planning. Your task is to suggest relevant and common RSVP questions for a '{{{eventType}}}'. Focus on practical questions that help organizers plan the event, such as dietary restrictions, plus-ones, attendance confirmation, or preference for activities.
+  prompt: `Vous êtes un assistant IA spécialisé dans la planification d'événements. Votre tâche est de suggérer des questions RSVP pertinentes et courantes pour un '{{{eventType}}}'. Concentrez-vous sur des questions pratiques qui aident les organisateurs à planifier l'événement, telles que les restrictions alimentaires, les accompagnants, la confirmation de présence ou les préférences pour les activités.
 
-Please provide a list of 5-7 unique questions. Avoid suggesting questions already present in the 'existingQuestions' list.
+Veuillez fournir une liste de 5 à 7 questions uniques. Évitez de suggérer des questions déjà présentes dans la liste 'existingQuestions'.
 
-Existing Questions:
+Questions existantes :
 {{#if existingQuestions}}
 {{#each existingQuestions}}- {{{this}}}
 {{/each}}
 {{else}}
-None.
+Aucune.
 {{/if}}
 
-Output the suggested questions as a JSON array of strings, under a 'suggestedQuestions' key.`,
+Retournez les questions suggérées sous la forme d'un tableau JSON de chaînes de caractères, sous une clé 'suggestedQuestions'.`,
 });
 
 const suggestRsvpQuestionsFlow = ai.defineFlow(

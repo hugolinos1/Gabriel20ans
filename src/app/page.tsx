@@ -30,16 +30,16 @@ export default function Home() {
                 <Logo />
               </div>
               <CardTitle className="font-headline text-3xl tracking-tight md:text-4xl">
-                You're Invited!
+                Vous êtes invité !
               </CardTitle>
               <CardDescription className="text-lg">
-                to celebrate Gabriel's 20th Birthday
+                pour célébrer le 20e anniversaire de Gabriel
               </CardDescription>
             </CardHeader>
             <CardContent className="text-center">
               <div className="mb-8 space-y-2">
-                <p className="font-bold text-primary">Saturday, July 18th</p>
-                <p className="text-muted-foreground">Join us for an evening of fun, music, and memories.</p>
+                <p className="font-bold text-primary">Samedi 18 juillet</p>
+                <p className="text-muted-foreground">Rejoignez-nous pour une soirée de plaisir, de musique et de souvenirs.</p>
               </div>
               <Suspense fallback={<div className="h-20" />}>
                 <RsvpEmailForm />

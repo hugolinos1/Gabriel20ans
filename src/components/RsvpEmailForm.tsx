@@ -17,7 +17,7 @@ import { ArrowRight } from 'lucide-react';
 
 const FormSchema = z.object({
   email: z.string().email({
-    message: 'Please enter a valid email address.',
+    message: 'Veuillez entrer une adresse e-mail valide.',
   }),
 });
 
@@ -45,7 +45,7 @@ export default function RsvpEmailForm() {
               <FormControl>
                 <Input
                   className="text-center"
-                  placeholder="Enter your email to RSVP"
+                  placeholder="Entrez votre email pour répondre à l'invitation"
                   {...field}
                 />
               </FormControl>
@@ -54,7 +54,7 @@ export default function RsvpEmailForm() {
           )}
         />
         <Button type="submit" size="lg" className="w-full">
-          Start RSVP
+          Commencer le RSVP
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </form>

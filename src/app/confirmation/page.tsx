@@ -11,13 +11,13 @@ export default function ConfirmationPage() {
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
             <PartyPopper className="h-8 w-8" />
           </div>
-          <CardTitle className="font-headline text-3xl">Thank You!</CardTitle>
-          <CardDescription>Your RSVP has been confirmed.</CardDescription>
+          <CardTitle className="font-headline text-3xl">Merci !</CardTitle>
+          <CardDescription>Votre RSVP a été confirmé.</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="mb-6 text-muted-foreground">We're excited to celebrate with you at Gabriel's Gala!</p>
+          <p className="mb-6 text-muted-foreground">Nous sommes ravis de célébrer avec vous au Gala de Gabriel !</p>
           <Button asChild>
-            <Link href="/">Back to Invitation</Link>
+            <Link href="/">Retour à l'invitation</Link>
           </Button>
         </CardContent>
       </Card>

@@ -5,9 +5,9 @@ import { z } from 'zod';
 import { suggestRsvpQuestions } from '@/ai/flows/suggest-rsvp-questions-flow';
 
 const rsvpSchema = z.object({
-  email: z.string().email({ message: 'A valid email is required.' }),
+  email: z.string().email({ message: 'Une adresse e-mail valide est requise.' }),
   isAttending: z.enum(['yes', 'no'], {
-    required_error: 'Please select an option.',
+    required_error: 'Veuillez sélectionner une option.',
   }),
   plusOnes: z.coerce.number().min(0).optional(),
   dietaryRestrictions: z.string().optional(),
@@ -40,7 +40,7 @@ export async function submitRsvp(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Failed to submit RSVP. Please check your answers.',
+      message: 'Échec de la soumission du RSVP. Veuillez vérifier vos réponses.',
     };
   }
 
@@ -63,10 +63,10 @@ export async function getSuggestedQuestions(
     const result = await suggestRsvpQuestions({ eventType, existingQuestions });
     return { success: true, questions: result.suggestedQuestions };
   } catch (error) {
-    console.error('Error suggesting questions:', error);
+    console.error('Erreur lors de la suggestion de questions :', error);
     return {
       success: false,
-      message: 'Failed to get suggestions. Please try again.',
+      message: 'Échec de la récupération des suggestions. Veuillez réessayer.',
     };
   }
 }

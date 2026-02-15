@@ -27,7 +27,7 @@ import { QuestionSuggester } from '@/components/QuestionSuggester';
 const RsvpFormSchema = z.object({
   email: z.string().email(),
   isAttending: z.enum(['yes', 'no'], {
-    required_error: 'Please let us know if you can make it.',
+    required_error: 'Veuillez nous indiquer si vous pouvez venir.',
   }),
   plusOnes: z.coerce.number().min(0).max(5).optional(),
   dietaryRestrictions: z.string().max(300).optional(),
@@ -58,7 +58,7 @@ export default function RsvpForm({ email }: { email: string }) {
     if (state.message) {
       toast({
         variant: 'destructive',
-        title: 'An error occurred',
+        title: 'Une erreur est survenue',
         description: state.message,
       });
     }
@@ -72,7 +72,7 @@ export default function RsvpForm({ email }: { email: string }) {
           <CardHeader>
             <CardTitle className="font-headline text-3xl">RSVP</CardTitle>
             <CardDescription>
-              Please fill out the form to let us know if you can make it.
+              Veuillez remplir le formulaire pour nous informer de votre présence.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-8">
@@ -81,7 +81,7 @@ export default function RsvpForm({ email }: { email: string }) {
               name="isAttending"
               render={({ field }) => (
                 <FormItem className="space-y-3">
-                  <FormLabel className="text-base">Will you be attending?</FormLabel>
+                  <FormLabel className="text-base">Serez-vous présent(e) ?</FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -92,13 +92,13 @@ export default function RsvpForm({ email }: { email: string }) {
                         <FormControl>
                           <RadioGroupItem value="yes" />
                         </FormControl>
-                        <FormLabel className="font-normal">Yes, I'll be there!</FormLabel>
+                        <FormLabel className="font-normal">Oui, je serai là !</FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="no" />
                         </FormControl>
-                        <FormLabel className="font-normal">No, I can't make it.</FormLabel>
+                        <FormLabel className="font-normal">Non, je ne pourrai pas venir.</FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
@@ -118,11 +118,11 @@ export default function RsvpForm({ email }: { email: string }) {
                   name="plusOnes"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Guests</FormLabel>
+                      <FormLabel>Invités</FormLabel>
                       <FormControl>
                         <Input type="number" min="0" max="5" {...field} />
                       </FormControl>
-                      <FormDescription>How many people are in your party (including yourself)?</FormDescription>
+                      <FormDescription>Combien de personnes dans votre groupe (vous inclus) ?</FormDescription>
                       <FormMessage>{state.errors?.plusOnes?.[0]}</FormMessage>
                     </FormItem>
                   )}
@@ -133,10 +133,10 @@ export default function RsvpForm({ email }: { email: string }) {
                   name="dietaryRestrictions"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Dietary Restrictions</FormLabel>
+                      <FormLabel>Restrictions alimentaires</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="e.g., vegetarian, gluten-free, nut allergy"
+                          placeholder="ex: végétarien, sans gluten, allergie aux noix"
                           {...field}
                         />
                       </FormControl>
@@ -150,9 +150,9 @@ export default function RsvpForm({ email }: { email: string }) {
                   name="songRequest"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Song Request</FormLabel>
+                      <FormLabel>Demande de chanson</FormLabel>
                       <FormControl>
-                        <Input placeholder="Any song that will get you on the dance floor?" {...field} />
+                        <Input placeholder="Une chanson qui vous fera danser ?" {...field} />
                       </FormControl>
                        <FormMessage>{state.errors?.songRequest?.[0]}</FormMessage>
                     </FormItem>
@@ -164,7 +164,7 @@ export default function RsvpForm({ email }: { email: string }) {
             <QuestionSuggester />
 
             <Button type="submit" className="w-full" size="lg" disabled={!isAttending}>
-              Submit RSVP
+              Envoyer le RSVP
             </Button>
           </CardContent>
         </Card>

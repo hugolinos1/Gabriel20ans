@@ -2,13 +2,13 @@
   "placeholderImages": [
     {
       "id": "gabriel-gala-main",
-      "description": "A festive birthday party scene with balloons and a cake.",
+      "description": "Une scène de fête d'anniversaire festive avec des ballons et un gâteau.",
       "imageUrl": "https://images.unsplash.com/photo-1602631985686-1bb0e6a8696e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxiaXJ0aGRheSUyMHBhcnR5fGVufDB8fHx8MTc3MTA2NTQzOHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "birthday party"
     },
     {
       "id": "gabriel-gala-banner",
-      "description": "A festive birthday party scene, cropped as a banner.",
+      "description": "Une scène de fête d'anniversaire festive, recadrée en bannière.",
       "imageUrl": "https://images.unsplash.com/photo-1503455637927-730bce8583c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiaXJ0aGRheSUyMGJhbm5lcnxlbnwwfHx8fDE3NzExNjY2MDN8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "birthday banner"
     }
