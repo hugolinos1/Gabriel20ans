@@ -24,12 +24,21 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 
+type RsvpFormValues = {
+  email: string;
+  attendingNoon?: 'yes' | 'no';
+  peopleNoon?: number;
+  attendingEvening?: 'yes' | 'no';
+  peopleEvening?: number;
+  comments?: string;
+};
+
 export default function RsvpForm({ email }: { email: string }) {
   const { toast } = useToast();
   const initialState: RsvpState = { message: null, errors: {} };
   const [state, dispatch] = useActionState(submitRsvp, initialState);
 
-  const form = useForm({
+  const form = useForm<RsvpFormValues>({
     defaultValues: {
       email,
       attendingNoon: undefined,
@@ -53,10 +62,20 @@ export default function RsvpForm({ email }: { email: string }) {
     }
   }, [state, toast]);
 
+  const onSubmit = (data: RsvpFormValues) => {
+    const formData = new FormData();
+    (Object.keys(data) as (keyof RsvpFormValues)[]).forEach((key) => {
+      const value = data[key];
+      if (value !== undefined && value !== null) {
+        formData.append(key, String(value));
+      }
+    });
+    dispatch(formData);
+  };
+
   return (
     <Form {...form}>
-      <form action={dispatch}>
-        <input type="hidden" {...form.register('email')} />
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card className="w-full shadow-xl">
           <CardHeader>
             <CardTitle className="font-headline text-3xl">Participation</CardTitle>
@@ -206,7 +225,7 @@ export default function RsvpForm({ email }: { email: string }) {
               type="submit"
               className="w-full"
               size="lg"
-              disabled={!attendingNoon || !attendingEvening}
+              disabled={!attendingNoon || !attendingEvening || form.formState.isSubmitting}
             >
               Envoyer ma réponse
             </Button>
