@@ -1,0 +1,60 @@
+{
+  "entities": {
+    "rsvp": {
+      "title": "RSVP Submission",
+      "description": "A single RSVP submission for the event.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The guest's email address."
+        },
+        "attendingNoon": {
+          "type": "string",
+          "enum": ["yes", "no"],
+          "description": "Whether the guest is attending the noon event."
+        },
+        "peopleNoon": {
+          "type": "number",
+          "description": "Number of people attending the noon event."
+        },
+        "attendingEvening": {
+          "type": "string",
+          "enum": ["yes", "no"],
+          "description": "Whether the guest is attending the evening event."
+        },
+        "peopleEvening": {
+          "type": "number",
+          "description": "Number of people attending the evening event."
+        },
+        "comments": {
+          "type": "string",
+          "description": "Optional comments from the guest."
+        },
+        "submittedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the RSVP was submitted."
+        }
+      },
+      "required": [
+        "email",
+        "attendingNoon",
+        "attendingEvening",
+        "submittedAt"
+      ]
+    }
+  },
+  "auth": {
+    "providers": ["email-password"]
+  },
+  "firestore": {
+    "/rsvps/{rsvpId}": {
+      "schema": {
+        "$ref": "#/backend/entities/rsvp"
+      },
+      "description": "Collection of all RSVP submissions."
+    }
+  }
+}
