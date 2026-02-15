@@ -3,14 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { collection, onSnapshot, QueryDocumentSnapshot, DocumentData, Timestamp } from 'firebase/firestore';
+import { collection, onSnapshot, QueryDocumentSnapshot, DocumentData, Timestamp, doc, deleteDoc } from 'firebase/firestore';
 import { auth, firestore } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { LogOut, Trash2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { deleteRsvp } from '@/app/actions';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -97,20 +96,21 @@ export default function AdminPage() {
   const handleDeleteConfirm = async () => {
     if (!rsvpToDelete) return;
 
-    const result = await deleteRsvp(rsvpToDelete.id);
-
-    if (result.success) {
-        toast({
-            title: 'Succès',
-            description: `La participation de ${rsvpToDelete.email} a été supprimée.`,
-        });
-    } else {
+    try {
+      await deleteDoc(doc(firestore, 'rsvps', rsvpToDelete.id));
+      toast({
+          title: 'Succès',
+          description: `La participation de ${rsvpToDelete.email} a été supprimée.`,
+      });
+    } catch (error) {
+        console.error('Error deleting document: ', error);
         toast({
             variant: 'destructive',
             title: 'Erreur',
-            description: result.message,
+            description: "Erreur lors de la suppression de la participation.",
         });
     }
+
 
     setAlertOpen(false);
     setRsvpToDelete(null);

@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { suggestRsvpQuestions } from '@/ai/flows/suggest-rsvp-questions-flow';
 import { sendRsvpNotification } from '@/ai/flows/send-notification-email-flow';
 import { firestore } from '@/firebase';
-import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 
 const rsvpSchema = z
   .object({
@@ -125,18 +125,5 @@ export async function getSuggestedQuestions(
       success: false,
       message: 'Échec de la récupération des suggestions. Veuillez réessayer.',
     };
-  }
-}
-
-export async function deleteRsvp(rsvpId: string) {
-  if (!rsvpId) {
-    return { success: false, message: 'ID de participation manquant.' };
-  }
-  try {
-    await deleteDoc(doc(firestore, 'rsvps', rsvpId));
-    return { success: true, message: 'Participation supprimée avec succès.' };
-  } catch (error) {
-    console.error('Error deleting document: ', error);
-    return { success: false, message: 'Erreur lors de la suppression de la participation.' };
   }
 }
