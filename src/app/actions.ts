@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { suggestRsvpQuestions } from '@/ai/flows/suggest-rsvp-questions-flow';
+import { sendRsvpNotification } from '@/ai/flows/send-notification-email-flow';
 import { firestore } from '@/firebase';
 import { addDoc, collection } from 'firebase/firestore';
 
@@ -77,13 +78,19 @@ export async function submitRsvp(
       message: 'Échec de la soumission de la participation. Veuillez vérifier vos réponses.',
     };
   }
+  
+  const { data: rsvpSubmission } = validatedFields;
 
   try {
     const rsvpData = {
-      ...validatedFields.data,
+      ...rsvpSubmission,
       submittedAt: new Date(),
     };
     await addDoc(collection(firestore, 'rsvps'), rsvpData);
+    
+    // Send notification email without waiting for it to finish
+    sendRsvpNotification(rsvpSubmission);
+
   } catch (error) {
     console.error('Error writing document: ', error);
     return {
@@ -91,8 +98,7 @@ export async function submitRsvp(
     };
   }
 
-  // In a real app, you would save validatedFields.data to a database.
-  console.log('Participation soumise:', validatedFields.data);
+  console.log('Participation soumise:', rsvpSubmission);
 
   // Redirect on success
   redirect('/confirmation');
