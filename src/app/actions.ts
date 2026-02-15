@@ -3,6 +3,8 @@
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { suggestRsvpQuestions } from '@/ai/flows/suggest-rsvp-questions-flow';
+import { firestore } from '@/firebase';
+import { addDoc, collection } from 'firebase/firestore';
 
 const rsvpSchema = z
   .object({
@@ -73,6 +75,19 @@ export async function submitRsvp(
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'Échec de la soumission de la participation. Veuillez vérifier vos réponses.',
+    };
+  }
+
+  try {
+    const rsvpData = {
+      ...validatedFields.data,
+      submittedAt: new Date(),
+    };
+    await addDoc(collection(firestore, 'rsvps'), rsvpData);
+  } catch (error) {
+    console.error('Error writing document: ', error);
+    return {
+      message: "Une erreur s'est produite lors de l'enregistrement de votre participation.",
     };
   }
 
