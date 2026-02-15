@@ -15,7 +15,7 @@ export default function ConfirmationPage() {
           <CardDescription>Votre participation a été confirmée.</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="mb-6 text-muted-foreground">Nous sommes ravis de célébrer avec vous aux 20 ans de Gabriel !</p>
+          <p className="mb-6 text-muted-foreground">Nous sommes ravis de célébrer avec vous les 20 ans de Gabriel !</p>
           <Button asChild>
             <Link href="/">Retour à l'invitation</Link>
           </Button>
