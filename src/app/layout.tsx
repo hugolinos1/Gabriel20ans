@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: "RSVP pour les 20 ans de Gabriel",
-  description: "RSVP pour la célébration du 20e anniversaire de Gabriel",
+  title: "Participation pour les 20 ans de Gabriel",
+  description: "Participation à la célébration du 20e anniversaire de Gabriel",
 };
 
 export default function RootLayout({

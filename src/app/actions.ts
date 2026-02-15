@@ -72,12 +72,12 @@ export async function submitRsvp(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Échec de la soumission du RSVP. Veuillez vérifier vos réponses.',
+      message: 'Échec de la soumission de la participation. Veuillez vérifier vos réponses.',
     };
   }
 
   // In a real app, you would save validatedFields.data to a database.
-  console.log('RSVP Submitted:', validatedFields.data);
+  console.log('Participation soumise:', validatedFields.data);
 
   // Redirect on success
   redirect('/confirmation');

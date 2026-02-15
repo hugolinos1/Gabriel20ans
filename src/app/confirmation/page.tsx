@@ -12,7 +12,7 @@ export default function ConfirmationPage() {
             <PartyPopper className="h-8 w-8" />
           </div>
           <CardTitle className="font-headline text-3xl">Merci !</CardTitle>
-          <CardDescription>Votre RSVP a été confirmé.</CardDescription>
+          <CardDescription>Votre participation a été confirmée.</CardDescription>
         </CardHeader>
         <CardContent>
           <p className="mb-6 text-muted-foreground">Nous sommes ravis de célébrer avec vous aux 20 ans de Gabriel !</p>

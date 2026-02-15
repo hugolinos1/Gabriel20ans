@@ -59,7 +59,7 @@ export default function RsvpForm({ email }: { email: string }) {
         <input type="hidden" {...form.register('email')} />
         <Card className="w-full shadow-xl">
           <CardHeader>
-            <CardTitle className="font-headline text-3xl">RSVP</CardTitle>
+            <CardTitle className="font-headline text-3xl">Participation</CardTitle>
             <CardDescription>
               Veuillez remplir le formulaire pour nous informer de votre
               présence.
@@ -208,7 +208,7 @@ export default function RsvpForm({ email }: { email: string }) {
               size="lg"
               disabled={!attendingNoon || !attendingEvening}
             >
-              Envoyer le RSVP
+              Envoyer ma réponse
             </Button>
           </CardContent>
         </Card>

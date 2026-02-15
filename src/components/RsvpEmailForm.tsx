@@ -54,7 +54,7 @@ export default function RsvpEmailForm() {
           )}
         />
         <Button type="submit" size="lg" className="w-full">
-          Commencer le RSVP
+          Répondre à l'invitation
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </form>
