@@ -2,60 +2,50 @@
 
 import { useFormState } from 'react-dom';
 import { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { useForm } from 'react-hook-form';
 import { submitRsvp, type RsvpState } from '@/app/actions';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { QuestionSuggester } from '@/components/QuestionSuggester';
-
-const RsvpFormSchema = z.object({
-  email: z.string().email(),
-  isAttending: z.enum(['yes', 'no'], {
-    required_error: 'Veuillez nous indiquer si vous pouvez venir.',
-  }),
-  plusOnes: z.coerce.number().min(0).max(5).optional(),
-  dietaryRestrictions: z.string().max(300).optional(),
-  songRequest: z.string().max(100).optional(),
-});
-
-type RsvpFormValues = z.infer<typeof RsvpFormSchema>;
 
 export default function RsvpForm({ email }: { email: string }) {
   const { toast } = useToast();
   const initialState: RsvpState = { message: null, errors: {} };
   const [state, dispatch] = useFormState(submitRsvp, initialState);
 
-  const form = useForm<RsvpFormValues>({
-    resolver: zodResolver(RsvpFormSchema),
+  const form = useForm({
     defaultValues: {
       email,
-      isAttending: undefined,
-      plusOnes: 0,
-      dietaryRestrictions: '',
-      songRequest: '',
+      attendingNoon: undefined,
+      peopleNoon: 1,
+      attendingEvening: undefined,
+      peopleEvening: 1,
+      comments: '',
     },
   });
 
-  const isAttending = form.watch('isAttending');
+  const attendingNoon = form.watch('attendingNoon');
+  const attendingEvening = form.watch('attendingEvening');
 
   useEffect(() => {
-    if (state.message) {
+    if (state.message && state.errors && Object.keys(state.errors).length > 0) {
       toast({
         variant: 'destructive',
         title: 'Une erreur est survenue',
@@ -72,16 +62,20 @@ export default function RsvpForm({ email }: { email: string }) {
           <CardHeader>
             <CardTitle className="font-headline text-3xl">RSVP</CardTitle>
             <CardDescription>
-              Veuillez remplir le formulaire pour nous informer de votre présence.
+              Veuillez remplir le formulaire pour nous informer de votre
+              présence.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-8">
+            {/* MIDI */}
             <FormField
               control={form.control}
-              name="isAttending"
+              name="attendingNoon"
               render={({ field }) => (
                 <FormItem className="space-y-3">
-                  <FormLabel className="text-base">Serez-vous présent(e) ?</FormLabel>
+                  <FormLabel className="text-base">
+                    Serez-vous présents le samedi 18 Juillet midi ?
+                  </FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -92,78 +86,129 @@ export default function RsvpForm({ email }: { email: string }) {
                         <FormControl>
                           <RadioGroupItem value="yes" />
                         </FormControl>
-                        <FormLabel className="font-normal">Oui, je serai là !</FormLabel>
+                        <FormLabel className="font-normal">Oui</FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="no" />
                         </FormControl>
-                        <FormLabel className="font-normal">Non, je ne pourrai pas venir.</FormLabel>
+                        <FormLabel className="font-normal">Non</FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
-                  <FormMessage>{state.errors?.isAttending?.[0]}</FormMessage>
+                  <FormMessage>{state.errors?.attendingNoon?.[0]}</FormMessage>
                 </FormItem>
               )}
             />
 
-            {isAttending === 'yes' && (
-              <div
-                key="attending-fields"
-                className="space-y-8 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
-                data-state="open"
-              >
+            {attendingNoon === 'yes' && (
+              <div key="noon-fields" className="pl-4 border-l ml-2 space-y-4">
                 <FormField
                   control={form.control}
-                  name="plusOnes"
+                  name="peopleNoon"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Invités</FormLabel>
+                      <FormLabel>
+                        Combien de personnes seront présentes ?
+                      </FormLabel>
                       <FormControl>
-                        <Input type="number" min="0" max="5" {...field} />
+                        <Input type="number" min="1" {...field} />
                       </FormControl>
-                      <FormDescription>Combien de personnes dans votre groupe (vous inclus) ?</FormDescription>
-                      <FormMessage>{state.errors?.plusOnes?.[0]}</FormMessage>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="dietaryRestrictions"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Restrictions alimentaires</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="ex: végétarien, sans gluten, allergie aux noix"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage>{state.errors?.dietaryRestrictions?.[0]}</FormMessage>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="songRequest"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Demande de chanson</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Une chanson qui vous fera danser ?" {...field} />
-                      </FormControl>
-                       <FormMessage>{state.errors?.songRequest?.[0]}</FormMessage>
+                      <FormMessage>{state.errors?.peopleNoon?.[0]}</FormMessage>
                     </FormItem>
                   )}
                 />
               </div>
             )}
-            
-            <QuestionSuggester />
+            {attendingNoon === 'no' && (
+              <p className="italic text-muted-foreground">Ah ! Dommage :-(</p>
+            )}
 
-            <Button type="submit" className="w-full" size="lg" disabled={!isAttending}>
+            {/* SOIR */}
+            <FormField
+              control={form.control}
+              name="attendingEvening"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel className="text-base">
+                    Serez-vous présent le samedi 18 Juillet au soir ?
+                  </FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="yes" />
+                        </FormControl>
+                        <FormLabel className="font-normal">Oui</FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="no" />
+                        </FormControl>
+                        <FormLabel className="font-normal">Non</FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage>
+                    {state.errors?.attendingEvening?.[0]}
+                  </FormMessage>
+                </FormItem>
+              )}
+            />
+
+            {attendingEvening === 'yes' && (
+              <div key="evening-fields" className="pl-4 border-l ml-2 space-y-4">
+                <FormField
+                  control={form.control}
+                  name="peopleEvening"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Combien de personnes seront présentes ?
+                      </FormLabel>
+                      <FormControl>
+                        <Input type="number" min="1" {...field} />
+                      </FormControl>
+                      <FormMessage>
+                        {state.errors?.peopleEvening?.[0]}
+                      </FormMessage>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+            {attendingEvening === 'no' && (
+              <p className="italic text-muted-foreground">Ah ! Dommage :-(</p>
+            )}
+
+            {/* COMMENTAIRES */}
+            <FormField
+              control={form.control}
+              name="comments"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Commentaires</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Laissez un commentaire ici..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage>{state.errors?.comments?.[0]}</FormMessage>
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={!attendingNoon || !attendingEvening}
+            >
               Envoyer le RSVP
             </Button>
           </CardContent>

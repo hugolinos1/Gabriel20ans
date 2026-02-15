@@ -4,23 +4,54 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { suggestRsvpQuestions } from '@/ai/flows/suggest-rsvp-questions-flow';
 
-const rsvpSchema = z.object({
-  email: z.string().email({ message: 'Une adresse e-mail valide est requise.' }),
-  isAttending: z.enum(['yes', 'no'], {
-    required_error: 'Veuillez sélectionner une option.',
-  }),
-  plusOnes: z.coerce.number().min(0).optional(),
-  dietaryRestrictions: z.string().optional(),
-  songRequest: z.string().optional(),
-});
+const rsvpSchema = z
+  .object({
+    email: z
+      .string()
+      .email({ message: 'Une adresse e-mail valide est requise.' }),
+    attendingNoon: z.enum(['yes', 'no'], {
+      required_error: 'Veuillez sélectionner une option pour le midi.',
+    }),
+    peopleNoon: z.coerce.number().min(0).optional(),
+    attendingEvening: z.enum(['yes', 'no'], {
+      required_error: 'Veuillez sélectionner une option pour le soir.',
+    }),
+    peopleEvening: z.coerce.number().min(0).optional(),
+    comments: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (
+      data.attendingNoon === 'yes' &&
+      (!data.peopleNoon || data.peopleNoon < 1)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          'Veuillez indiquer combien de personnes seront présentes pour le midi (au moins 1).',
+        path: ['peopleNoon'],
+      });
+    }
+    if (
+      data.attendingEvening === 'yes' &&
+      (!data.peopleEvening || data.peopleEvening < 1)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          'Veuillez indiquer combien de personnes seront présentes pour le soir (au moins 1).',
+        path: ['peopleEvening'],
+      });
+    }
+  });
 
 export type RsvpState = {
   errors?: {
     email?: string[];
-    isAttending?: string[];
-    plusOnes?: string[];
-    dietaryRestrictions?: string[];
-    songRequest?: string[];
+    attendingNoon?: string[];
+    peopleNoon?: string[];
+    attendingEvening?: string[];
+    peopleEvening?: string[];
+    comments?: string[];
   };
   message?: string | null;
 };
@@ -31,10 +62,11 @@ export async function submitRsvp(
 ): Promise<RsvpState> {
   const validatedFields = rsvpSchema.safeParse({
     email: formData.get('email'),
-    isAttending: formData.get('isAttending'),
-    plusOnes: formData.get('plusOnes'),
-    dietaryRestrictions: formData.get('dietaryRestrictions'),
-    songRequest: formData.get('songRequest'),
+    attendingNoon: formData.get('attendingNoon'),
+    peopleNoon: formData.get('peopleNoon'),
+    attendingEvening: formData.get('attendingEvening'),
+    peopleEvening: formData.get('peopleEvening'),
+    comments: formData.get('comments'),
   });
 
   if (!validatedFields.success) {
@@ -47,11 +79,7 @@ export async function submitRsvp(
   // In a real app, you would save validatedFields.data to a database.
   console.log('RSVP Submitted:', validatedFields.data);
 
-  if (validatedFields.data.isAttending === 'no') {
-    redirect('/confirmation'); // Redirect even if not attending
-  }
-
-  // Only redirect on success
+  // Redirect on success
   redirect('/confirmation');
 }
 
