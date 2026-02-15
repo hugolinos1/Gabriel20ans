@@ -21,6 +21,8 @@ const FormSchema = z.object({
   }),
 });
 
+const ADMIN_EMAIL = 'hugues.rabier@gmail.com';
+
 export default function RsvpEmailForm() {
   const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -31,7 +33,11 @@ export default function RsvpEmailForm() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    router.push(`/rsvp?email=${encodeURIComponent(data.email)}`);
+    if (data.email.toLowerCase() === ADMIN_EMAIL) {
+      router.push('/login');
+    } else {
+      router.push(`/rsvp?email=${encodeURIComponent(data.email)}`);
+    }
   }
 
   return (
