@@ -1,7 +1,6 @@
 'use client';
 
-import { useFormState } from 'react-dom';
-import { useEffect } from 'react';
+import { useActionState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { submitRsvp, type RsvpState } from '@/app/actions';
 import { Button } from '@/components/ui/button';
@@ -28,7 +27,7 @@ import { useToast } from '@/hooks/use-toast';
 export default function RsvpForm({ email }: { email: string }) {
   const { toast } = useToast();
   const initialState: RsvpState = { message: null, errors: {} };
-  const [state, dispatch] = useFormState(submitRsvp, initialState);
+  const [state, dispatch] = useActionState(submitRsvp, initialState);
 
   const form = useForm({
     defaultValues: {
