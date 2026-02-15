@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { submitRsvp, type RsvpState } from '@/app/actions';
 import { Button } from '@/components/ui/button';
@@ -35,8 +35,7 @@ type RsvpFormValues = {
 
 export default function RsvpForm({ email }: { email: string }) {
   const { toast } = useToast();
-  const initialState: RsvpState = { message: null, errors: {} };
-  const [state, dispatch] = useActionState(submitRsvp, initialState);
+  const [state, setState] = useState<RsvpState>({ message: null, errors: {} });
 
   const form = useForm<RsvpFormValues>({
     defaultValues: {
@@ -62,7 +61,7 @@ export default function RsvpForm({ email }: { email: string }) {
     }
   }, [state, toast]);
 
-  const onSubmit = (data: RsvpFormValues) => {
+  const onSubmit = async (data: RsvpFormValues) => {
     const formData = new FormData();
     (Object.keys(data) as (keyof RsvpFormValues)[]).forEach((key) => {
       const value = data[key];
@@ -70,7 +69,9 @@ export default function RsvpForm({ email }: { email: string }) {
         formData.append(key, String(value));
       }
     });
-    dispatch(formData);
+
+    const result = await submitRsvp({ message: null, errors: {} }, formData);
+    setState(result);
   };
 
   return (
