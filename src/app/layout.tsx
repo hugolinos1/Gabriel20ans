@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: "RSVP pour le Gala de Gabriel",
+  title: "RSVP pour les 20 ans de Gabriel",
   description: "RSVP pour la célébration du 20e anniversaire de Gabriel",
 };
 
