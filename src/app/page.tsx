@@ -39,7 +39,7 @@ export default function Home() {
             <CardContent className="text-center">
               <div className="mb-8 space-y-2">
                 <p className="font-bold text-primary">Samedi 18 juillet</p>
-                <p className="text-muted-foreground">Rejoignez-nous pour une soirée de plaisir, de musique et de souvenirs.</p>
+                <p className="text-muted-foreground">Rejoignez-nous pour une journée de plaisir, de rigolades et de souvenirs.</p>
               </div>
               <Suspense fallback={<div className="h-20" />}>
                 <RsvpEmailForm />
